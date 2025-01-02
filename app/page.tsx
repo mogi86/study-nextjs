@@ -1,11 +1,12 @@
-import Link from "next/link";
+'use client';
 
-export default function Home({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
-  const paramValue = searchParams.error_key || "defaultValue";
+import Link from "next/link";
+import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
+
+function HomeContent() {
+  const searchParams = useSearchParams();
+  const paramValue = searchParams.get('error_key') || "defaultValue";
 
   const shouldError = paramValue === "true";
 
@@ -16,5 +17,13 @@ export default function Home({
     <div>
       <Link href="/dashboard">Dashboard</Link>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <HomeContent />
+    </Suspense>
   );
 }
