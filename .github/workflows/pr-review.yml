@@ -32,7 +32,7 @@ jobs:
           prompt: |
             REPO: ${{ github.repository }}
             PR NUMBER: ${{ github.event.pull_request.number }}
-            
+
             次のNext.jsプロジェクトのPull Requestを包括的にレビューしてください。
             以下の観点から詳細な分析を行い、改善提案を提供してください：
 
@@ -107,3 +107,6 @@ jobs:
             *.min.js
             yarn.lock
             package-lock.json
+
+          claude_args: |
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*)"
