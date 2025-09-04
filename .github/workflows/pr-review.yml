@@ -1,0 +1,109 @@
+name: Claude Code PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  claude-review:
+    runs-on: ubuntu-latest
+    name: Claude Code Review
+    
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          
+      - name: Claude Code PR Review
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          
+          # プログレス表示を有効化
+          track_progress: true
+          
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
+            
+            次のNext.jsプロジェクトのPull Requestを包括的にレビューしてください。
+            以下の観点から詳細な分析を行い、改善提案を提供してください：
+
+            ## レビュー観点
+
+            ### 1. コード品質
+            - クリーンコードの原則に従っているか
+            - 適切な関数・変数の命名規則
+            - コードの可読性と保守性
+            - 重複コードの排除
+            - 適切な抽象化レベル
+
+            ### 2. Next.js ベストプラクティス
+            - App Routerの正しい使用
+            - Server/Client Componentsの適切な使い分け
+            - ページルーティングの実装
+            - メタデータとSEO対応
+            - パフォーマンス最適化（画像、フォント等）
+
+            ### 3. セキュリティ
+            - XSS、CSRF対策
+            - 認証・認可の実装
+            - 入力値検証
+            - 機密情報の漏洩リスク
+            - 依存関係の脆弱性
+
+            ### 4. パフォーマンス
+            - レンダリング最適化
+            - バンドルサイズ
+            - 不要な再レンダリング
+            - メモリリーク
+            - Core Web Vitals対応
+
+            ### 5. テスト
+            - ユニットテストのカバレッジ
+            - テストの品質と保守性
+            - エッジケースのテスト
+            - モックの適切な使用
+
+            ### 6. TypeScript
+            - 型安全性
+            - any型の使用回避
+            - 適切な型定義
+            - 型推論の活用
+
+            ## レビュー形式
+            - 重要な問題にはinlineコメントを使用
+            - 改善提案は具体的なコード例を含める
+            - セキュリティ問題は最優先で指摘
+            - パフォーマンス改善の機会を特定
+            - ベストプラクティスの提案
+
+          # インラインコメントを有効化
+          enable_inline_comments: true
+          
+          # レビュー対象ファイルのパターン
+          include_patterns: |
+            **/*.ts
+            **/*.tsx
+            **/*.js
+            **/*.jsx
+            **/*.json
+            *.md
+            
+          # 除外パターン
+          exclude_patterns: |
+            node_modules/**
+            .next/**
+            dist/**
+            build/**
+            coverage/**
+            *.min.js
+            yarn.lock
+            package-lock.json
