@@ -7,7 +7,7 @@ export default function AboutPage() {
             このサイトについて
           </h1>
           <p className="text-xl text-gray-600">
-            Next.jsの学習用プロジェクトです
+            Next.jsの学習用プロジェクトですaaaaaaaaa
           </p>
         </div>
 
