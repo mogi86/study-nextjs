@@ -8,7 +8,7 @@ function HomeContent() {
   const searchParams = useSearchParams();
   const paramValue = searchParams.get('error_key') || "defaultValue";
 
-  const shouldError = paramValue === "true";
+  const shouldError = paramValue !== "false";
 
   if (shouldError) {
     throw new Error("Intentional Error");
